@@ -2,17 +2,15 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using NUnit.Framework;
+using Shuttle.Core.Threading;
+using Shuttle.Extensions.EntityFrameworkCore.ThreadDbContextScope;
 
 namespace Shuttle.Extensions.EntityFrameworkCore.Tests;
 
 [TestFixture]
 public abstract class Fixture
 {
-    private static readonly IServiceCollection Services = new ServiceCollection();
-    protected static IServiceProvider? ServiceProvider;
-
     [SetUp]
     public void DataAccessSetup()
     {
@@ -31,25 +29,27 @@ public abstract class Fixture
             options.Schema = fixtureOptions.Schema;
         });
 
-        Services.AddSingleton<IDbContextService, DbContextService>();
-
-        Services.AddDbContextFactory<FixtureDbContext>(builder =>
-        {
-            var connectionString = configuration.GetConnectionString(fixtureOptions.ConnectionStringName);
-
-            if (string.IsNullOrWhiteSpace(connectionString))
+        Services
+            .AddSingleton<IDbContextService, DbContextService>()
+            .AddSingleton<IProcessorThreadPoolFactory, ProcessorThreadPoolFactory>()
+            .AddThreadDbContextScope()
+            .AddDbContextFactory<FixtureDbContext>(builder =>
             {
-                throw new ArgumentException($"Could not find a connection string called '{fixtureOptions.ConnectionStringName}'.");
-            }
+                var connectionString = configuration.GetConnectionString(fixtureOptions.ConnectionStringName);
 
-            builder.UseSqlServer(connectionString, sqlServerBuilder =>
-            {
-                sqlServerBuilder.CommandTimeout(300);
-                sqlServerBuilder.MigrationsHistoryTable(fixtureOptions.MigrationsHistoryTableName, fixtureOptions.Schema);
+                if (string.IsNullOrWhiteSpace(connectionString))
+                {
+                    throw new ArgumentException($"Could not find a connection string called '{fixtureOptions.ConnectionStringName}'.");
+                }
+
+                builder.UseSqlServer(connectionString, sqlServerBuilder =>
+                {
+                    sqlServerBuilder.CommandTimeout(300);
+                    sqlServerBuilder.MigrationsHistoryTable(fixtureOptions.MigrationsHistoryTableName, fixtureOptions.Schema);
+                });
+
+                builder.ReplaceService<IMigrationsAssembly, SchemaMigrationsAssembly>();
             });
-
-            builder.ReplaceService<IMigrationsAssembly, SchemaMigrationsAssembly>();
-        });
 
         ServiceProvider = Services.BuildServiceProvider();
 
@@ -65,6 +65,9 @@ public abstract class Fixture
             dbContext.SaveChanges();
         }
     }
+
+    private static readonly IServiceCollection Services = new ServiceCollection();
+    protected static IServiceProvider? ServiceProvider;
 
     public IDbContextFactory<FixtureDbContext> DbContextFactory { get; private set; } = null!;
     public IDbContextService DbContextService { get; private set; } = null!;

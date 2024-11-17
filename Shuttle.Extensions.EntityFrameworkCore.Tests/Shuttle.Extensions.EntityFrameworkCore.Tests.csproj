@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shuttle.Extensions.EntityFrameworkCore.ThreadDbContextScope\Shuttle.Extensions.EntityFrameworkCore.ThreadDbContextScope.csproj" />
     <ProjectReference Include="..\Shuttle.Extensions.EntityFrameworkCore\Shuttle.Extensions.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
