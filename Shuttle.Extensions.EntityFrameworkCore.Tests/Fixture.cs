@@ -33,14 +33,13 @@ public abstract class Fixture
 
         Services.AddSingleton<IDbContextService, DbContextService>();
 
-        Services.AddDbContextFactory<FixtureDbContext>((provider, builder) =>
+        Services.AddDbContextFactory<FixtureDbContext>(builder =>
         {
-            var options = provider.GetRequiredService<IOptions<FixtureOptions>>().Value;
-            var connectionString = configuration.GetConnectionString(options.ConnectionStringName);
+            var connectionString = configuration.GetConnectionString(fixtureOptions.ConnectionStringName);
 
             if (string.IsNullOrWhiteSpace(connectionString))
             {
-                throw new ArgumentException($"Could not find a connection string called '{options.ConnectionStringName}'.");
+                throw new ArgumentException($"Could not find a connection string called '{fixtureOptions.ConnectionStringName}'.");
             }
 
             builder.UseSqlServer(connectionString, sqlServerBuilder =>
