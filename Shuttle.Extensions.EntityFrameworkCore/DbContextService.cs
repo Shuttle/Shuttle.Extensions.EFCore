@@ -8,47 +8,46 @@ public class DbContextService : IDbContextService
     private static readonly Type DbContextType = typeof (DbContext);
 
     private readonly DbContextCollection _dbContextCollection = new();
-    private readonly SemaphoreSlim _lock = new(1, 1);
+    private readonly object _lock = new object();
 
     public IDisposable Add(DbContext dbContext)
     {
         Guard.AgainstNull(dbContext);
 
-        _lock.Wait();
-
         IDisposable result;
 
-        try
+        lock(_lock)
         {
             result = GetDbContextCollection().Add(dbContext);
         }
-        finally
-        {
-            _lock.Release();
-        }
 
         return result;
+    }
+
+    public bool Contains(Type type)
+    {
+        lock (_lock)
+        {
+            return GetDbContextCollection().Contains(type);
+        }
     }
 
     public void Remove(Type type)
     {
         Guard.AgainstNull(type);
 
-        _lock.Wait();
-
-        try
+        lock(_lock)
         {
             GetDbContextCollection().Remove(type);
-        }
-        finally
-        {
-            _lock.Release();
         }
     }
 
     public DbContext Get(Type type)
     {
-        return _dbContextCollection.Get(type);
+        lock(_lock)
+        {
+            return _dbContextCollection.Get(type);
+        }
     }
 
     private DbContextCollection GetDbContextCollection()

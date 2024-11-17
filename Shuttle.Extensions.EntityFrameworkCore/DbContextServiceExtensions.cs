@@ -19,4 +19,9 @@ public static class DbContextServiceExtensions
     {
         return (T)Guard.AgainstNull(dbContextService).Get(typeof(T));
     }
+
+    public static bool Contains<T>(this IDbContextService dbContextService) where T : DbContext
+    {
+        return Guard.AgainstNull(dbContextService).Contains(typeof(T));
+    }
 }

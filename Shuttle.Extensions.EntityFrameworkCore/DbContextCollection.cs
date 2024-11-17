@@ -39,4 +39,9 @@ public class DbContextCollection
 
         return context;
     }
+
+    public bool Contains(Type type)
+    {
+        return _dbContexts.ContainsKey(type);
+    }
 }
