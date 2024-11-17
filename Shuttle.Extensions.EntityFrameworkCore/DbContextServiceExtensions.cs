@@ -10,7 +10,7 @@ public static class DbContextServiceExtensions
         Guard.AgainstNull(dbContextService).Remove(Guard.AgainstNull(dbContext).GetType());
     }
 
-    public static void Remove<T>(this IDbContextService dbContextService, DbContext dbContext) where T: DbContext
+    public static void Remove<T>(this IDbContextService dbContextService) where T: DbContext
     {
         Guard.AgainstNull(dbContextService).Remove(typeof(T));
     }
