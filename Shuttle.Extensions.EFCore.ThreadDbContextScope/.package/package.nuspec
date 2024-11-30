@@ -16,8 +16,8 @@
 		<copyright>Copyright (c) 2024, Eben Roux</copyright>
 		<tags></tags>
 		<dependencies>
-      <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="8.0.2" />
-      <dependency id="Microsoft.Extensions.Hosting" version="8.0.1" />
+      <dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.0" />
+      <dependency id="Microsoft.Extensions.Hosting" version="9.0.0" />
       <dependency id="Shuttle.Core.Contract" version="20.0.0" />
       <dependency id="Shuttle.Core.Threading" version="20.0.0" />
       <dependency id="Shuttle.Extensions.EFCore" version="20.0.0" />
