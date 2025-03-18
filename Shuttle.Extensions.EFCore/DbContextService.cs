@@ -8,7 +8,7 @@ public class DbContextService : IDbContextService
     private static readonly Type DbContextType = typeof (DbContext);
 
     private readonly DbContextCollection _dbContextCollection = new();
-    private readonly object _lock = new object();
+    private readonly object _lock = new();
 
     public IDisposable Add(DbContext dbContext)
     {
@@ -46,7 +46,7 @@ public class DbContextService : IDbContextService
     {
         lock(_lock)
         {
-            return _dbContextCollection.Get(type);
+            return GetDbContextCollection().Get(type);
         }
     }
 
