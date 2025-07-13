@@ -125,4 +125,12 @@
     <value>DbContext of type '{0}' has not been registered.</value>
     <comment>0 = DbContext type name</comment>
   </data>
+  <data name="RecordIdNotFoundException" xml:space="preserve">
+    <value>Could not find a record for '{0}' with id '{1}'.</value>
+    <comment>0 = entity name, 1 = id/key</comment>
+  </data>
+  <data name="RecordNameNotFoundException" xml:space="preserve">
+    <value>Could not find '{0}' with name '{1}'.</value>
+    <comment>0 = entity name, 1 = name</comment>
+  </data>
 </root>

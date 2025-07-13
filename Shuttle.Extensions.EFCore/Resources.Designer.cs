@@ -77,5 +77,23 @@ namespace Shuttle.Extensions.EFCore {
                 return ResourceManager.GetString("DuplicateDbContextException", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find a record for &apos;{0}&apos; with id &apos;{1}&apos;..
+        /// </summary>
+        internal static string RecordIdNotFoundException {
+            get {
+                return ResourceManager.GetString("RecordIdNotFoundException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find &apos;{0}&apos; with name &apos;{1}&apos;..
+        /// </summary>
+        internal static string RecordNameNotFoundException {
+            get {
+                return ResourceManager.GetString("RecordNameNotFoundException", resourceCulture);
+            }
+        }
     }
 }
